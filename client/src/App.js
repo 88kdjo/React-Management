@@ -1,36 +1,30 @@
+import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper } from '@mui/material';
+import { useState, useEffect } from 'react';
 import './App.css';
 
 import Customer from './components/Customer';
-import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper } from '@mui/material';
-
-const customers = [
-  {
-    'id': 1,
-    'image': 'https://via.placeholder.com/64/64/1',
-    'name': '홍길동',
-    'birthday': '901122',
-    'gender': '남자',
-    'job': '대학생'
-  },
-  {
-    'id': 2,
-    'image': 'https://via.placeholder.com/64/64/2',
-    'name': '김우리',
-    'birthday': '990304',
-    'gender': '여자',
-    'job': '대학생'
-  },
-  {
-    'id': 3,
-    'image': 'https://via.placeholder.com/64/64/3',
-    'name': '주하나',
-    'birthday': '001011',
-    'gender': '여자',
-    'job': '대학생'
-  },
-]
 
 const App = () => {
+
+  const [customersData, setCustomersData] = useState([]);
+
+  const callApi = async () => {
+    const response = await fetch('/api/customers', {
+      headers: {
+        Accept: "application/json",
+      },
+      method: "GET",
+    });
+
+    const body = await response.json();
+
+    return body;
+  };
+
+  useEffect( () => {
+    callApi().then( (data) => setCustomersData(data));
+  }, []);
+
   return (
     <TableContainer component={Paper}>
       <Table stickyHeader sx={{minWidth: '1080px'}}>
@@ -46,7 +40,7 @@ const App = () => {
         </TableHead>
         <TableBody>
           {
-            customers.map( (row) => {
+            customersData ? customersData.map( (row) => {
               return (
                 <Customer
                   key={row.id}
@@ -58,8 +52,8 @@ const App = () => {
                   job={row.job}
                 />
               );
-            })
-          };
+            }) : "No data"
+          }
         </TableBody>
       </Table>
     </TableContainer>
