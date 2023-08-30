@@ -1,4 +1,4 @@
-import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper } from '@mui/material';
+import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, CircularProgress } from '@mui/material';
 import { useState, useEffect } from 'react';
 import './App.css';
 
@@ -6,7 +6,9 @@ import Customer from './components/Customer';
 
 const App = () => {
 
-  const [customersData, setCustomersData] = useState([]);
+  const [customersData, setCustomersData] = useState("");
+  const [completed, setCompleted] = useState(0);
+  const [isLoad, setIsLoad] = useState(false);
 
   const callApi = async () => {
     const response = await fetch('/api/customers', {
@@ -18,12 +20,25 @@ const App = () => {
 
     const body = await response.json();
 
+    setIsLoad(true);
+
     return body;
   };
 
   useEffect( () => {
-    callApi().then( (data) => setCustomersData(data));
-  }, []);
+    let complete = 0;
+    let timer = setInterval( () => {
+      (complete >= 100) ? complete = 0 : complete += 1;
+      setCompleted(complete);
+      if (isLoad) {
+        clearInterval(timer);
+      }
+    }, 20);
+
+    callApi()
+      .then( (data) => setCustomersData(data))
+      .catch( (err) => console.log(`[ERR] ${err}`));
+  }, [isLoad]);
 
   return (
     <TableContainer component={Paper}>
@@ -52,7 +67,13 @@ const App = () => {
                   job={row.job}
                 />
               );
-            }) : "No data"
+            })
+            :
+            <TableRow>
+              <TableCell colSpan='6' align='center'>
+                <CircularProgress color='success' variant='indeterminate' value={completed} />
+              </TableCell>
+            </TableRow>
           }
         </TableBody>
       </Table>
