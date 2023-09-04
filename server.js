@@ -26,7 +26,7 @@ connection.connect();
 
 app.get('/api/customers', (request, response) => {
   connection.query(
-    "SELECT * FROM CUSTOMER WHERE 1=1 AND isDeleted = 0 ORDER BY id ASC",
+    'SELECT * FROM CUSTOMER WHERE 1=1 AND isDeleted=0 ORDER BY id ASC',
     (err, rows, fields) => {
       response.send(rows);
     }
@@ -60,7 +60,7 @@ app.post('/api/customers', upload.single('image'), (request, response) => {
 });
 
 app.delete('/api/customers/:id', (request, response) => {
-  const sql = 'UPDATE CUSTOMER SET isDeleted = 1 WHERE 1=1 AND id = ?';
+  const sql = 'UPDATE CUSTOMER SET isDeleted=1 WHERE 1=1 AND isDeleted=0 AND id=?';
   const params = [request.params.id];
   connection.query(sql, params, (err, rows, fields) => {
     response.send(rows);
@@ -68,7 +68,7 @@ app.delete('/api/customers/:id', (request, response) => {
 });
 
 app.listen(port, () => {
-  const dir = "./upload";
+  const dir = './upload';
   if (!fs.existsSync(dir)) { fs.mkdirSync(dir); }
   console.log(`[INFO] Listening on port ${port}`);
 });

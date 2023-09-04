@@ -1,22 +1,24 @@
+import { Dialog, DialogActions, DialogTitle, DialogContent, TextField, Button } from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
 
-const CustomerAdd = (props) => {
+const CustomerAdd = (param) => {
 
   const [file, setFile] = useState(null);
-  const [fileName, setFileName] = useState("");
-  const [userName, setUserName] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [gender, setGender] = useState("");
-  const [job, setJob] = useState("");
+  const [fileName, setFileName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [birthday, setBirthday] = useState('');
+  const [gender, setGender] = useState('');
+  const [job, setJob] = useState('');
+  const [open, setOpen] = useState(false);
 
   const customerAddStateReset = () => {
     setFile(null);
-    setFileName("");
-    setUserName("");
-    setBirthday("");
-    setGender("");
-    setJob("");
+    setFileName('');
+    setUserName('');
+    setBirthday('');
+    setGender('');
+    setJob('');
   };
 
   const setFileHandler = (e) => {
@@ -50,26 +52,50 @@ const CustomerAdd = (props) => {
     e.preventDefault();
     addCustomer()
       .then( (response) => {
-        console.log(`[INFO] ${response.statusText}(${response.status})`);
-        props.stateRefresh();
+        console.log(`[INFO] formSubmitHandler: ${response.statusText}(${response.status})`);
+        param.stateRefresh();
       })
       .catch( (err) => {
         console.log(`[ERR] formSubmitHandler: ${err}`);
       });
       
-      customerAddStateReset();
+      clickCloseHandler();
   }
 
+  const clickOpenHandler = () => {
+    setOpen(true);
+  };
+
+  const clickCloseHandler = () => {
+    customerAddStateReset();
+    setOpen(false);
+  };
+
   return (
-    <form onSubmit={formSubmitHandler}>
-      <h1>고객 추가</h1>
-      프로필 이미지: <input type="file" name="file" accept="image/*" value={fileName} onChange={setFileHandler}/><br/>
-      이름: <input type="text" name="userName" value={userName} onChange={setUserNameHandler}/><br/>
-      생년월일: <input type="text" name="birthday" value={birthday} onChange={setBirthdayHandler}/><br/>
-      성별: <input type="text" name="gender" value={gender} onChange={setGenderHandler}/><br/>
-      직업: <input type="text" name="job" value={job} onChange={setJobHandler}/><br/>
-      <button type="submit">추가하기</button>
-    </form>
+    <div>
+      <Button color='primary' variant='contained' onClick={clickOpenHandler}>
+        고객 추가하기
+      </Button>
+      <Dialog open={open} onClose={clickCloseHandler}>
+        <DialogTitle>고객 추가</DialogTitle>
+        <DialogContent>
+          <input type='file' id='raised-button-file' accept='image/*' value={fileName} style={{display: 'none'}} onChange={setFileHandler}/><br/>
+          <label htmlFor='raised-button-file'>
+            <Button color='primary' variant='contained' component='span' name='file'>
+              {fileName === '' ? '프로필 이미지 선택' : fileName}
+            </Button>
+          </label><br/>
+          <TextField label='이름' type='text' name='userName' value={userName} onChange={setUserNameHandler}/><br/>
+          <TextField label='생년월일' type='text' name='birthday' value={birthday} onChange={setBirthdayHandler}/><br/>
+          <TextField label='성별' type='text' name='gender' value={gender} onChange={setGenderHandler}/><br/>
+          <TextField label='직업' type='text' name='job' value={job} onChange={setJobHandler}/><br/>
+        </DialogContent>
+        <DialogActions>
+          <Button color='primary' variant='contained' onClick={formSubmitHandler}>추가</Button>
+          <Button color='primary' variant='outlined' onClick={clickCloseHandler}>닫기</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 
 }

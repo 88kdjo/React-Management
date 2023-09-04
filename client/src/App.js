@@ -1,18 +1,18 @@
-import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, CircularProgress } from '@mui/material';
-import { useState, useEffect } from 'react';
 import './App.css';
 
+import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, CircularProgress } from '@mui/material';
+import { useState, useEffect } from 'react';
 import Customer from './components/Customer';
 import CustomerAdd from './components/CustomerAdd';
 
 const App = () => {
 
-  const [customersData, setCustomersData] = useState("");
+  const [customersData, setCustomersData] = useState('');
   const [completed, setCompleted] = useState(0);
   const [isLoad, setIsLoad] = useState(false);
 
   const appStateReset = () => {
-    setCustomersData("");
+    setCustomersData('');
     setCompleted(0);
     setIsLoad(false);
   };
@@ -28,9 +28,9 @@ const App = () => {
   const callApi = async () => {
     const response = await fetch('/api/customers', {
       headers: {
-        Accept: "application/json",
+        Accept: 'application/json',
       },
-      method: "GET",
+      method: 'GET',
     });
 
     const body = await response.json();
