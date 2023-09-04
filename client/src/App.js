@@ -67,6 +67,7 @@ const App = () => {
               <TableCell>생년월일</TableCell>
               <TableCell>성별</TableCell>
               <TableCell>직업</TableCell>
+              <TableCell>설정</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -74,6 +75,7 @@ const App = () => {
               customersData ? customersData.map( (row) => {
                 return (
                   <Customer
+                    stateRefresh={stateRefresh}
                     key={row.id}
                     id={row.id}
                     image={row.image}
@@ -94,7 +96,7 @@ const App = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <CustomerAdd stateRefresh={stateRefresh}/>
+      <CustomerAdd stateRefresh={stateRefresh} />
     </div>
   );
 }

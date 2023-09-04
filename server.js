@@ -26,7 +26,7 @@ connection.connect();
 
 app.get('/api/customers', (request, response) => {
   connection.query(
-    "SELECT * FROM CUSTOMER",
+    "SELECT * FROM CUSTOMER WHERE 1=1 AND isDeleted = 0 ORDER BY id ASC",
     (err, rows, fields) => {
       response.send(rows);
     }
@@ -45,7 +45,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.post('/api/customers', upload.single('image'), (request, response) => {
-  const sql = 'INSERT INTO CUSTOMER VALUES (null, ?, ?, ?, ?, ?)';
+  const sql = 'INSERT INTO CUSTOMER VALUES (null, ?, ?, ?, ?, ?, NOW(), 0)';
   const image = `http://localhost:${port}/image/${request.file.filename}`;
   const name = request.body.name;
   const birthday = request.body.birthday;
@@ -57,6 +57,14 @@ app.post('/api/customers', upload.single('image'), (request, response) => {
     response.send(rows);
   });
 
+});
+
+app.delete('/api/customers/:id', (request, response) => {
+  const sql = 'UPDATE CUSTOMER SET isDeleted = 1 WHERE 1=1 AND id = ?';
+  const params = [request.params.id];
+  connection.query(sql, params, (err, rows, fields) => {
+    response.send(rows);
+  });
 });
 
 app.listen(port, () => {
