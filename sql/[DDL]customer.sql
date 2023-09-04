@@ -6,7 +6,9 @@ CREATE TABLE CUSTOMER (
     name varchar(64),
     birthday varchar(64),
     gender varchar(64),
-    job varchar(64)
+    job varchar(64),
+    createdDate datetime,
+    isDeleted int
 ) DEFAULT CHARACTER SET UTF8 COLLATE utf8_general_ci;
 
 SELECT HOST, USER, PLUGIN, AUTHENTICATION_STRING FROM mysql.user;
