@@ -79,16 +79,17 @@ const CustomerAdd = (param) => {
       <Dialog open={open} onClose={clickCloseHandler}>
         <DialogTitle>고객 추가</DialogTitle>
         <DialogContent>
-          <input type='file' id='raised-button-file' accept='image/*' value={fileName} style={{display: 'none'}} onChange={setFileHandler}/><br/>
+          <input type='file' id='raised-button-file' accept='image/*' value={fileName} style={{display: 'none'}} onChange={setFileHandler}/>
           <label htmlFor='raised-button-file'>
             <Button color='primary' variant='contained' component='span' name='file'>
               {fileName === '' ? '프로필 이미지 선택' : fileName}
             </Button>
-          </label><br/>
-          <TextField label='이름' type='text' name='userName' value={userName} onChange={setUserNameHandler}/><br/>
-          <TextField label='생년월일' type='text' name='birthday' value={birthday} onChange={setBirthdayHandler}/><br/>
-          <TextField label='성별' type='text' name='gender' value={gender} onChange={setGenderHandler}/><br/>
-          <TextField label='직업' type='text' name='job' value={job} onChange={setJobHandler}/><br/>
+          </label>
+          <br/><br/>
+          <TextField label='이름' type='text' name='userName' value={userName} onChange={setUserNameHandler}/><br/><br/>
+          <TextField label='생년월일' type='text' name='birthday' value={birthday} onChange={setBirthdayHandler}/><br/><br/>
+          <TextField label='성별' type='text' name='gender' value={gender} onChange={setGenderHandler}/><br/><br/>
+          <TextField label='직업' type='text' name='job' value={job} onChange={setJobHandler}/><br/><br/>
         </DialogContent>
         <DialogActions>
           <Button color='primary' variant='contained' onClick={formSubmitHandler}>추가</Button>

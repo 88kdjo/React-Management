@@ -35,6 +35,8 @@ app.get('/api/customers', (request, response) => {
 
 const storage = multer.diskStorage({
   destination: (request, file, cb) => {
+    const dir = './upload';
+    if (!fs.existsSync(dir)) { fs.mkdirSync(dir); }
     cb(null, 'upload');
   },
   filename: (request, file, cb) => {
@@ -67,8 +69,4 @@ app.delete('/api/customers/:id', (request, response) => {
   });
 });
 
-app.listen(port, () => {
-  const dir = './upload';
-  if (!fs.existsSync(dir)) { fs.mkdirSync(dir); }
-  console.log(`[INFO] Listening on port ${port}`);
-});
+app.listen(port, () => { console.log(`[INFO] Listening on port ${port}`); });
